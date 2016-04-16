@@ -1,17 +1,16 @@
 #include <pebble.h>
 #include "menu.h"
-#include "globals.c"
 #include "splash_screen.h"
 
-#define ROWS 0
-#define TITLE 1
-#define TYPE 2
-#define CONTENT 3
-
+#define KEY_NUM 0
+#define KEY_URL 1
+#define KEY_TYPE 2
+#define KEY_CONTENTS 3
 
 static Window *window;
 static MenuLayer *menuL;
 char **titles;
+char **urls;
 int rows;
 
 void menu_show(bool animated){
@@ -23,7 +22,11 @@ uint16_t get_num_rows(MenuLayer *menu_layer, uint16_t section_index, void *data)
 }
 
 void draw_rows(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data){
-	menu_cell_basic_draw(ctx, cell_layer, titles[cell_index->row], NULL, NULL);
+	#ifndef PBL_ROUND
+		menu_cell_title_draw(ctx, cell_layer, titles[cell_index->row]);
+	#else
+		menu_cell_basic_draw(ctx, cell_layer, titles[cell_index->row], NULL, NULL);
+	#endif
 }
 
 void selected(MenuLayer *menu_layer, MenuIndex *cell_index, void *data){
@@ -33,13 +36,20 @@ void selected(MenuLayer *menu_layer, MenuIndex *cell_index, void *data){
 	DictionaryIterator *iter;
 	app_message_outbox_begin(&iter);
 	
-	dict_write_cstring(iter, TITLE, titles[cell_index->row]);
-	dict_write_int8(iter, TYPE, 0);
+	dict_write_cstring(iter, KEY_URL, urls[cell_index->row]);
+	dict_write_int8(iter, KEY_TYPE, 0);
 	
 	dict_write_end(iter);
 	app_message_outbox_send();
 }
 
+static int16_t cell_height(struct MenuLayer *menu_layer, MenuIndex *cell_index, void *data) {
+	#ifndef PBL_ROUND
+		return 150;
+	#else
+		return 44*2;
+	#endif
+}
 
 
 void menu_window_load(){
@@ -51,6 +61,7 @@ void menu_window_load(){
 		.get_num_rows = get_num_rows,
 		.draw_row  = draw_rows,
 		.select_click  = selected,
+		.get_cell_height = cell_height
 	});
 
 	menu_layer_set_click_config_onto_window(menuL, window);
@@ -61,9 +72,10 @@ void menu_window_unload(){
 	menu_layer_destroy(menuL);
 }
 
-void menu_init(char **titles_, int rows_){
+void menu_init(char **titles_, char **urls_, int rows_){
 	titles = titles_;
 	rows = rows_;
+	urls = urls_;
 	
 	
 	window = window_create();

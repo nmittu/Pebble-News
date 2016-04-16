@@ -1,6 +1,5 @@
 #include <pebble.h>
 #include "scroll_text.h"
-#include "globals.c"
 #include "splash_screen.h"
 
 #define paddingX 4
@@ -54,14 +53,12 @@ void scroll_text_init(char* text_, char* title_){
 	Layer *rootLayer = window_get_root_layer(window);
 	GRect bounds = layer_get_bounds(rootLayer);
 	
-	window_set_background_color(window, primary);
 	
 	scrollL = scroll_layer_create(bounds);
 	textL = text_layer_create(GRect(paddingX, paddingY, bounds.size.w - (paddingX*2), maxH));
 	text_layer_set_text(textL, text_);
-	text_layer_set_font(textL, fonts_get_system_font(font));
+	text_layer_set_font(textL, fonts_get_system_font(FONT_KEY_GOTHIC_24));
 	text_layer_set_background_color(textL, GColorClear);
-	text_layer_set_text_color(textL, secondary);
 	scroll_layer_add_child(scrollL, text_layer_get_layer(textL));
 	
 	GSize max_size = text_layer_get_content_size(textL);
@@ -75,8 +72,6 @@ void scroll_text_init(char* text_, char* title_){
 	
 	layer_add_child(rootLayer, scroll_layer_get_layer(scrollL));
 		
-	scroll_layer_set_shadow_hidden(scrollL, !shadows);
-	
 	#if defined(PBL_ROUND)
 		text_layer_enable_screen_text_flow_and_paging(textL, 2);
 		scroll_layer_set_paging(scrollL, true);

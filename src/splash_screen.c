@@ -1,6 +1,5 @@
 #include <pebble.h>
 #include "splash_screen.h"
-#include "globals.c"
 
 static Window *splash_window = NULL;
 static TextLayer *text = NULL;
@@ -20,7 +19,6 @@ void splash_window_load(){
 	
 	text = text_layer_create(GRect(0, PBL_IF_ROUND_ELSE(58, 52), bounds.size.w, 50));
 	text_layer_set_background_color(text, GColorClear);
-	text_layer_set_text_color(text, secondary);
 	text_layer_set_text(text, text_);
 	text_layer_set_font(text, fonts_get_system_font(FONT_KEY_GOTHIC_28));
 	text_layer_set_text_alignment(text, GTextAlignmentCenter);
@@ -37,7 +35,6 @@ void splash_init(char *text__){
 	text_ = text__;
 	splash_window = window_create();
 	
-	window_set_background_color(splash_window, primary);
 	
 	window_set_window_handlers(splash_window, (WindowHandlers) {
     .load = splash_window_load,
