@@ -1,0 +1,28 @@
+{
+    "appKeys": {
+        "KEY_NEM": 0,
+        "KEY_URL": 1
+    },
+    "capabilities": [
+        ""
+    ],
+    "companyName": "nickmsoccer@gmail.com",
+    "enableMultiJS": true,
+    "longName": "Pebble News",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "Pebble News",
+    "targetPlatforms": [
+        "aplite",
+        "basalt",
+        "chalk"
+    ],
+    "uuid": "62496067-cd49-42b2-8059-bb93f4775ce4",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
