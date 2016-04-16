@@ -40,19 +40,7 @@ void selected(MenuLayer *menu_layer, MenuIndex *cell_index, void *data){
 	app_message_outbox_send();
 }
 
-void long_selected(MenuLayer *menu_layer, MenuIndex *cell_index, void *data){
-	window_stack_pop(true);
-	splash_init("Downloading");
-	splash_show(true);
-	
-	DictionaryIterator *iter;
-	app_message_outbox_begin(&iter);
-	
-	dict_write_int8(iter, TYPE, 1);
-	
-	dict_write_end(iter);
-	app_message_outbox_send();
-}
+
 
 void menu_window_load(){
 	Layer *mLayer = window_get_root_layer(window);
@@ -63,10 +51,8 @@ void menu_window_load(){
 		.get_num_rows = get_num_rows,
 		.draw_row  = draw_rows,
 		.select_click  = selected,
-		.select_long_click = long_selected
 	});
-	menu_layer_set_normal_colors(menuL, primary, secondary);
-	menu_layer_set_highlight_colors(menuL, secondary, primary);
+
 	menu_layer_set_click_config_onto_window(menuL, window);
 	
 	layer_add_child(mLayer, menu_layer_get_layer(menuL));
