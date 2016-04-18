@@ -6,9 +6,9 @@
         "KEY_URL": 1
     },
     "capabilities": [
-        ""
+        "configurable"
     ],
-    "companyName": "nickmsoccer@gmail.com",
+    "companyName": "nick@mittudev.com",
     "enableMultiJS": true,
     "longName": "Pebble News",
     "projectType": "native",

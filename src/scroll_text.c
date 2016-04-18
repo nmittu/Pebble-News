@@ -35,12 +35,6 @@ void select_long_click_handler(ClickRecognizerRef recognizer, void *context) {
 	app_message_outbox_send();
 }
 
-void select_long_click_release_handler(ClickRecognizerRef recognizer, void *context) {
-}
-
-void config_provider(Window *window) {
-  window_long_click_subscribe(BUTTON_ID_SELECT, 700, select_long_click_handler, select_long_click_release_handler);
-}
 
 void scroll_text_show(bool animate){
 	window_stack_push(window, animate);
@@ -57,17 +51,14 @@ void scroll_text_init(char* text_, char* title_){
 	scrollL = scroll_layer_create(bounds);
 	textL = text_layer_create(GRect(paddingX, paddingY, bounds.size.w - (paddingX*2), maxH));
 	text_layer_set_text(textL, text_);
-	text_layer_set_font(textL, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+	text_layer_set_font(textL, fonts_get_system_font(FONT_KEY_GOTHIC_18));
 	text_layer_set_background_color(textL, GColorClear);
 	scroll_layer_add_child(scrollL, text_layer_get_layer(textL));
 	
 	GSize max_size = text_layer_get_content_size(textL);
 	
-	scroll_layer_set_callbacks(scrollL, (ScrollLayerCallbacks){
-		.click_config_provider = (ClickConfigProvider)config_provider
-	});
 	scroll_layer_set_content_size(scrollL, GSize(bounds.size.w, max_size.h + (paddingY * 3)));
-	scroll_layer_set_shadow_hidden(scrollL, false);
+	//scroll_layer_set_shadow_hidden(scrollL, false);
 	scroll_layer_set_click_config_onto_window(scrollL, window);
 	
 	layer_add_child(rootLayer, scroll_layer_get_layer(scrollL));

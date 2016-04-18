@@ -33,6 +33,11 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 		splash_remove(false);
 		scroll_text_init(dict_find(iterator, KEY_CONTENTS)->value->cstring, NULL);
 		scroll_text_show(true);
+	}else if (dict_find(iterator, KEY_TYPE)->value->int8 == 2){
+		splash_remove(false);
+		splash_destroy();
+		splash_init("Set Up On Phone");
+		splash_show(true);
 	}
 }
 

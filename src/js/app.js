@@ -1,10 +1,32 @@
-var url = "http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1/?api-key=588faf2c30818c381c3cac757e7f5a27:13:75013790";
+var mostPopularKey = null;
+var articleSearchKey = null;
+
+var url = "http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1/?api-key=";
 
 function load() {
+	
+	if(mostPopularKey === null || articleSearchKey === null){
+		var dictionary = {
+				KEY_TYPE: 2
+    };
+		
+		Pebble.sendAppMessage(dictionary,
+		function(e){
+			console.log('Index Sent');
+		},
+		function(e){
+			console.log(dumpObject(e));
+		}
+	);
+		return;
+	}
+	
+		//console.log(mostPopularKey === null);
     var XHR = new XMLHttpRequest();
-    XHR.open("GET", url, false);
+    XHR.open("GET", url+mostPopularKey, false);
     XHR.send();
 
+		console.log(XHR.responseText);
     var json = JSON.parse(XHR.responseText);
 
     var max = 10;
@@ -39,10 +61,10 @@ function load() {
 }
 
 function loadFirstParagraph(url) {
-    var url_ = "http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=web_url:(\""+url+"\")&api-key=4b97078a7129d8248bdc530ff27b16ee:9:75013790";
+    var url_ = "http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=web_url:(\""+url+"\")&api-key="+articleSearchKey;
 
     var XHR = new XMLHttpRequest();
-    XHR.open("GET", url_, false);
+    XHR.open("GET", encodeURI(url_), false);
     XHR.send();
 
     var json = JSON.parse(XHR.responseText);
@@ -58,7 +80,7 @@ function loadFirstParagraph(url) {
 			console.log('ART Sent');
 		},
 		function(e){
-			console.log('Error Sending Weather To Pebble!');
+			console.log('Error Sending Weather To Pebble');
 		}
 	);
     //console.log(json.response.docs[0].lead_paragraph);
@@ -74,6 +96,32 @@ Pebble.addEventListener('appmessage',
 
 Pebble.addEventListener('ready',
     function (e) {
+			if(localStorage.getItem("mostPopular") && localStorage.getItem("articleSearch")){
+				mostPopularKey = decodeURIComponent(localStorage.getItem("mostPopular"));
+				articleSearchKey = decodeURIComponent(localStorage.getItem("articleSearch"));
+			}
+			
+			
         load();
     }
 );
+
+Pebble.addEventListener('showConfiguration', function(e) {
+  // Show config page
+  Pebble.openURL('http://pebbleconf-remote.mittudev.com/PebbleNews.html');
+});
+
+Pebble.addEventListener('webviewclosed', function(e) {
+  // Decode and parse config data as JSON
+	console.log("Config Set");
+	
+  var config_data = JSON.parse(decodeURIComponent(e.response));
+
+  localStorage.setItem("mostPopular", encodeURIComponent(config_data.mostPopular));
+	localStorage.setItem("articleSearch", encodeURIComponent(config_data.articleSearch));
+	
+	
+	mostPopularKey = config_data.mostPopular;
+	articleSearchKey = config_data.articleSearch;
+	load();
+});
