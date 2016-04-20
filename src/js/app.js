@@ -71,7 +71,9 @@ function loadFirstParagraph(url) {
 
 		var dictionary = {
 			KEY_TYPE: 1,
-			KEY_CONTENTS: json.response.docs[0].lead_paragraph
+			KEY_CONTENTS: json.response.docs[0].lead_paragraph,
+			KEY_AUTHOR: json.response.docs[0].byline.original,
+			KEY_TITLE: json.response.docs[0].headline.main
 		};
 	
 	

@@ -1,7 +1,9 @@
 {
     "appKeys": {
+        "KEY_AUTHOR": 4,
         "KEY_CONTENTS": 3,
         "KEY_NUM": 0,
+        "KEY_TITLE": 5,
         "KEY_TYPE": 2,
         "KEY_URL": 1
     },

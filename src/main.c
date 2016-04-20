@@ -7,6 +7,8 @@
 #define KEY_URL 1
 #define KEY_TYPE 2
 #define KEY_CONTENTS 3
+#define KEY_AUTHOR 4
+#define KEY_TITLE 5
 
 char **titles;
 char **urls;
@@ -31,7 +33,9 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 		menu_show(true);
 	}else if(dict_find(iterator, KEY_TYPE)->value->int8 == 1){
 		splash_remove(false);
-		scroll_text_init(dict_find(iterator, KEY_CONTENTS)->value->cstring, NULL);
+		scroll_text_init(dict_find(iterator, KEY_CONTENTS)->value->cstring, 
+										 dict_find(iterator, KEY_TITLE)->value->cstring, 
+										 dict_find(iterator, KEY_AUTHOR)->value->cstring);
 		scroll_text_show(true);
 	}else if (dict_find(iterator, KEY_TYPE)->value->int8 == 2){
 		splash_remove(false);
